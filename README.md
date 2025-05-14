@@ -80,10 +80,10 @@ Crea un archivo .env en la raíz del proyecto y agrega las siguientes variables:
 
 ```.env
 # Configuración de la Base de Datos MySQL
-DB_HOST="localhost"      # Host de MySQL (ej: localhost, una dirección IP, o el nombre del servicio Docker)
-DB_USER="miusuario"      # Nombre de usuario de MySQL
-DB_PASSWORD="micontraseña"  # Contraseña del usuario de MySQL
-DB_NAME="base_de_datos_ferremas"    # Nombre de la base de datos de MySQL
+host="localhost"      # Host de MySQL (ej: localhost, una dirección IP, o el nombre del servicio Docker)
+user="miusuario"      # Nombre de usuario de MySQL
+password="micontraseña"  # Contraseña del usuario de MySQL
+db="base_de_datos_ferremas"    # Nombre de la base de datos de MySQL
 
 # Claves API para Autenticación (separadas por comas)
 # Genera claves fuertes y únicas. Considera usar un generador de claves.
