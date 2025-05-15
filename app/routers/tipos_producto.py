@@ -33,6 +33,8 @@ def get_tiposproducto():
         
         return tp
 
+    except HTTPException as http_ex:
+        raise http_ex
     except Exception as ex:
         raise HTTPException(status_code=500, detail=str(ex))
 
@@ -64,6 +66,8 @@ def get_tipoproducto_por_id(id_tipo_prod: int):
         tp = {"id_tipo_prod": result[0], "nombre": result[1]}
         return tp
 
+    except HTTPException as http_ex:
+        raise http_ex
     except Exception as ex:
         raise HTTPException(status_code=500, detail=str(ex))
 
@@ -90,6 +94,8 @@ def add_tipoproducto(nombre: str, _: None = Depends(verify_api_key)):
         # Responder con un mensaje de éxito
         return {"status_code": 201, "detail": "Tipo de producto agregado correctamente"}
 
+    except HTTPException as http_ex:
+        raise http_ex
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Error al agregar el tipo de producto: {str(ex)}")
 
@@ -122,6 +128,8 @@ def update_tipoproducto(id_tipo_prod: int, nombre: str, _: None = Depends(verify
         # Responder con un mensaje de éxito
         return {"status_code": 200, "detail": f"Tipo de producto con id {id_tipo_prod} actualizado correctamente"}
 
+    except HTTPException as http_ex:
+        raise http_ex
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Error al actualizar el tipo de producto: {str(ex)}")
 
@@ -154,5 +162,7 @@ def delete_tipoproducto(id_tipo_prod: int, _: None = Depends(verify_api_key)):
         # Responder con un mensaje de éxito
         return {"status_code": 200, "detail": f"Tipo de producto con id {id_tipo_prod} eliminado correctamente"}
 
+    except HTTPException as http_ex:
+        raise http_ex
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Error al eliminar el tipo de producto: {str(ex)}")

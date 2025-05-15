@@ -15,4 +15,4 @@ API_KEYS = api_keys_env.split(",")
 # Dependencia para verificar la API key
 def verify_api_key(x_api_key: str = Header(...)) -> None:
     if x_api_key not in API_KEYS:
-        raise HTTPException(status_code=403, detail="Acceso no autorizado: API key inválida")
+        raise HTTPException(status_code=401, detail="Acceso no autorizado: API key inválida")

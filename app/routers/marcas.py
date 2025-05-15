@@ -33,6 +33,8 @@ def get_marcas():
         
         return marcas
 
+    except HTTPException as http_ex:
+        raise http_ex
     except Exception as ex:
         raise HTTPException(status_code=500, detail=str(ex))
 
@@ -64,6 +66,8 @@ def get_marca_por_id(id_marca: int):
         marca = {"id_marca": result[0], "nombre": result[1]}
         return marca
 
+    except HTTPException as http_ex:
+        raise http_ex
     except Exception as ex:
         raise HTTPException(status_code=500, detail=str(ex))
 
@@ -90,6 +94,8 @@ def add_marca(nombre: str, _: None = Depends(verify_api_key)):
         # Responder con un mensaje de éxito
         return {"status_code": 201, "detail": "Marca agregada correctamente"}
 
+    except HTTPException as http_ex:
+        raise http_ex
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Error al agregar la marca: {str(ex)}")
 
@@ -122,6 +128,8 @@ def update_marca(id_marca: int, nombre: str, _: None = Depends(verify_api_key)):
         # Responder con un mensaje de éxito
         return {"status_code": 200, "detail": f"Marca con id {id_marca} actualizada correctamente"}
 
+    except HTTPException as http_ex:
+        raise http_ex
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Error al actualizar la marca: {str(ex)}")
 
@@ -154,5 +162,7 @@ def delete_marca(id_marca: int, _: None = Depends(verify_api_key)):
         # Responder con un mensaje de éxito
         return {"status_code": 200, "detail": f"Marca con id {id_marca} eliminada correctamente"}
 
+    except HTTPException as http_ex:
+        raise http_ex
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Error al eliminar la marca: {str(ex)}")
