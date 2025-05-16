@@ -7,14 +7,14 @@ router = APIRouter(prefix="/marcas", tags=["Marcas"])
 @router.get("/")
 def get_marcas():
     try:
-        # Conectar a la base de datos
+        #* Conectar a la base de datos
         cone = get_cone()
         if cone is None:
             raise HTTPException(status_code=500, detail="Error al conectar con la base de datos")
         
         cursor = cone.cursor()
         
-        # Ejecutar consulta para obtener todas las marcas
+        #* Ejecutar consulta para obtener todas las marcas
         cursor.execute("SELECT id_marca, nombre FROM MARCA")
         
         # Recuperar las marcas
@@ -23,11 +23,11 @@ def get_marcas():
             for id_marca, nombre in cursor
         ]
         
-        # Cerrar la conexión
+        #* Cerrar la conexión
         cursor.close()
         cone.close()
         
-        # Verificar si no se encontraron marcas
+        #* Verificar si no se encontraron marcas
         if not marcas:
             raise HTTPException(status_code=404, detail="No hay marcas registradas")
         
@@ -41,28 +41,28 @@ def get_marcas():
 @router.get("/{id_marca}")
 def get_marca_por_id(id_marca: int):
     try:
-        # Conectar a la base de datos
+        #* Conectar a la base de datos
         cone = get_cone()
         if cone is None:
             raise HTTPException(status_code=500, detail="Error al conectar con la base de datos")
         
         cursor = cone.cursor()
         
-        # Ejecutar consulta para obtener la marca por ID
+        #* Ejecutar consulta para obtener la marca por ID
         cursor.execute("SELECT id_marca, nombre FROM MARCA WHERE id_marca = %s", (id_marca,))
         
-        # Obtener resultado
+        #* Obtener resultado
         result = cursor.fetchone()
         
-        # Cerrar la conexión
+        #* Cerrar la conexión
         cursor.close()
         cone.close()
         
-        # Verificar si la marca existe
+        #* Verificar si la marca existe
         if result is None:
             raise HTTPException(status_code=404, detail=f"No se encontró una marca con id {id_marca}")
         
-        # Construir la respuesta
+        #* Construir la respuesta
         marca = {"id_marca": result[0], "nombre": result[1]}
         return marca
 
@@ -74,24 +74,24 @@ def get_marca_por_id(id_marca: int):
 @router.post("/add")
 def add_marca(nombre: str, _: None = Depends(verify_api_key)):
     try:
-        # Conectar a la base de datos
+        #* Conectar a la base de datos
         cone = get_cone()
         if cone is None:
             raise HTTPException(status_code=500, detail="Error al conectar con la base de datos")
         
         cursor = cone.cursor()
         
-        # Insertar la nueva marca
+        #* Insertar la nueva marca
         cursor.execute("INSERT INTO MARCA (nombre) VALUES (%s)", (nombre,))
         
-        # Confirmar los cambios
+        #* Confirmar los cambios
         cone.commit()
         
-        # Cerrar la conexión
+        #* Cerrar la conexión
         cursor.close()
         cone.close()
         
-        # Responder con un mensaje de éxito
+        #* Responder con un mensaje de éxito
         return {"status_code": 201, "detail": "Marca agregada correctamente"}
 
     except HTTPException as http_ex:
@@ -102,30 +102,30 @@ def add_marca(nombre: str, _: None = Depends(verify_api_key)):
 @router.put("/update/{id_marca}")
 def update_marca(id_marca: int, nombre: str, _: None = Depends(verify_api_key)):
     try:
-        # Conectar a la base de datos
+        #* Conectar a la base de datos
         cone = get_cone()
         if cone is None:
             raise HTTPException(status_code=500, detail="Error al conectar con la base de datos")
         
         cursor = cone.cursor()
         
-        # Verificar si la marca existe
+        #* Verificar si la marca existe
         cursor.execute("SELECT COUNT(*) FROM MARCA WHERE id_marca = %s", (id_marca,))
         result = cursor.fetchone()
         if result is None or result[0] == 0:
             raise HTTPException(status_code=404, detail=f"No se encontró una marca con id {id_marca}")
         
-        # Actualizar el nombre de la marca
+        #* Actualizar el nombre de la marca
         cursor.execute("UPDATE MARCA SET nombre = %s WHERE id_marca = %s", (nombre, id_marca))
         
-        # Confirmar los cambios
+        #* Confirmar los cambios
         cone.commit()
         
-        # Cerrar la conexión
+        #* Cerrar la conexión
         cursor.close()
         cone.close()
         
-        # Responder con un mensaje de éxito
+        #* Responder con un mensaje de éxito
         return {"status_code": 200, "detail": f"Marca con id {id_marca} actualizada correctamente"}
 
     except HTTPException as http_ex:
@@ -136,30 +136,30 @@ def update_marca(id_marca: int, nombre: str, _: None = Depends(verify_api_key)):
 @router.delete("/delete/{id_marca}")
 def delete_marca(id_marca: int, _: None = Depends(verify_api_key)):
     try:
-        # Conectar a la base de datos
+        #* Conectar a la base de datos
         cone = get_cone()
         if cone is None:
             raise HTTPException(status_code=500, detail="Error al conectar con la base de datos")
         
         cursor = cone.cursor()
         
-        # Verificar si la marca existe
+        #* Verificar si la marca existe
         cursor.execute("SELECT COUNT(*) FROM MARCA WHERE id_marca = %s", (id_marca,))
         result = cursor.fetchone()
         if result is None or result[0] == 0:
             raise HTTPException(status_code=404, detail=f"No se encontró una marca con id {id_marca}")
         
-        # Eliminar la marca
+        #* Eliminar la marca
         cursor.execute("DELETE FROM MARCA WHERE id_marca = %s", (id_marca,))
         
-        # Confirmar los cambios
+        #* Confirmar los cambios
         cone.commit()
         
-        # Cerrar la conexión
+        #* Cerrar la conexión
         cursor.close()
         cone.close()
         
-        # Responder con un mensaje de éxito
+        #* Responder con un mensaje de éxito
         return {"status_code": 200, "detail": f"Marca con id {id_marca} eliminada correctamente"}
 
     except HTTPException as http_ex:

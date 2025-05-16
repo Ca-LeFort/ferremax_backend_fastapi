@@ -21,7 +21,7 @@ app.add_middleware(
     allow_headers=["*"],  #* Permitir todos los encabezados
 )
 
-# Incluir los routers
+#* Incluir los routers
 app.include_router(productos.router)
 app.include_router(marcas.router)
 app.include_router(tipos_producto.router)
