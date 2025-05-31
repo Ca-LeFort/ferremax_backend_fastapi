@@ -15,12 +15,12 @@ def get_marcas():
         cursor = cone.cursor()
         
         #* Ejecutar consulta para obtener todas las marcas
-        cursor.execute("SELECT id_marca, nombre FROM MARCA")
+        cursor.execute("SELECT id_marca, imagen_url, nombre FROM MARCA")
         
         # Recuperar las marcas
         marcas = [
-            {"id_marca": id_marca, "nombre": nombre}
-            for id_marca, nombre in cursor
+            {"id_marca": id_marca, "imagen_url": imagen_url, "nombre": nombre}
+            for id_marca, imagen_url, nombre in cursor
         ]
         
         #* Cerrar la conexión
@@ -49,7 +49,7 @@ def get_marca_por_id(id_marca: int):
         cursor = cone.cursor()
         
         #* Ejecutar consulta para obtener la marca por ID
-        cursor.execute("SELECT id_marca, nombre FROM MARCA WHERE id_marca = %s", (id_marca,))
+        cursor.execute("SELECT id_marca, imagen_url, nombre FROM MARCA WHERE id_marca = %s", (id_marca,))
         
         #* Obtener resultado
         result = cursor.fetchone()
@@ -72,7 +72,7 @@ def get_marca_por_id(id_marca: int):
         raise HTTPException(status_code=500, detail=str(ex))
 
 @router.post("/add")
-def add_marca(nombre: str, _: None = Depends(verify_api_key)):
+def add_marca(imagen_url: str, nombre: str, _: None = Depends(verify_api_key)):
     try:
         #* Conectar a la base de datos
         cone = get_cone()
@@ -82,7 +82,7 @@ def add_marca(nombre: str, _: None = Depends(verify_api_key)):
         cursor = cone.cursor()
         
         #* Insertar la nueva marca
-        cursor.execute("INSERT INTO MARCA (nombre) VALUES (%s)", (nombre,))
+        cursor.execute("INSERT INTO MARCA (imagen_url, nombre) VALUES (%s, %s)", (imagen_url,nombre))
         
         #* Confirmar los cambios
         cone.commit()
@@ -100,7 +100,7 @@ def add_marca(nombre: str, _: None = Depends(verify_api_key)):
         raise HTTPException(status_code=500, detail=f"Error al agregar la marca: {str(ex)}")
 
 @router.put("/update/{id_marca}")
-def update_marca(id_marca: int, nombre: str, _: None = Depends(verify_api_key)):
+def update_marca(id_marca: int, imagen_url:str, nombre: str, _: None = Depends(verify_api_key)):
     try:
         #* Conectar a la base de datos
         cone = get_cone()
@@ -116,7 +116,7 @@ def update_marca(id_marca: int, nombre: str, _: None = Depends(verify_api_key)):
             raise HTTPException(status_code=404, detail=f"No se encontró una marca con id {id_marca}")
         
         #* Actualizar el nombre de la marca
-        cursor.execute("UPDATE MARCA SET nombre = %s WHERE id_marca = %s", (nombre, id_marca))
+        cursor.execute("UPDATE MARCA SET imagen_url = %s, nombre = %s WHERE id_marca = %s", (imagen_url, nombre, id_marca))
         
         #* Confirmar los cambios
         cone.commit()
